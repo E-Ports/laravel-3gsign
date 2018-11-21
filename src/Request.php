@@ -1,7 +1,9 @@
 <?php
 
-namespace L3GSign;
+namespace Axsor\L3GSign;
 
+
+use Axsor\L3GSign\Exceptions\InvalidUserDataException;
 
 class Request
 {
@@ -19,6 +21,13 @@ class Request
          * */
     }
 
+    /**
+     * Sets User Data to Login.
+     * Checks if all required properties are in object
+     *
+     * @param $auth
+     * @throws InvalidUserDataException
+     */
     private function setAuth($auth)
     {
         $requiredProperties = ['codigoEmpresa', 'login', 'password', 'idioma', 'date'];
@@ -29,5 +38,7 @@ class Request
         {
             if (!property_exists($auth, $property)) throw new InvalidUserDataException;
         }
+
+        $this->auth = $auth;
     }
 }

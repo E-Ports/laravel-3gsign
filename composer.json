@@ -10,5 +10,20 @@
             "name": "axsor",
             "email": "alexsorribes22@gmail.com"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+            "Axsor\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Axsor\\L3GSign\\L3GSignServiceProvider"
+            ],
+            "aliases": {
+                "L3GSign": "Axsor\\L3GSign\\L3GSignFacade"
+            }
+        }
+    }
 }
