@@ -1,0 +1,14 @@
+{
+    "name": "axsor/laravel-3gsign",
+    "description": "3G Mobile Sign Client API",
+    "require": {
+        "artisaninweb/laravel-soap": "0.3.0.9"
+    },
+    "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "axsor",
+            "email": "alexsorribes22@gmail.com"
+        }
+    ]
+}
