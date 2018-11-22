@@ -3,15 +3,16 @@
 namespace Axsor\L3GSign;
 
 
+use Artisaninweb\SoapWrapper\SoapWrapper;
 use Axsor\L3GSign\Exceptions\InvalidUserDataException;
 
 class Request
 {
     private $auth;
 
-    public function __construct($client)
+    public function __construct()
     {
-        $this->setAuth($client);
+        $this->soapWrapper = new SoapWrapper();
         /*
          *  <mob:codigoEmpresa>empresaEjemplo</mob:codigoEmpresa>
             <mob:login>wsempresaEjemplo</mob:login>
@@ -28,17 +29,43 @@ class Request
      * @param $auth
      * @throws InvalidUserDataException
      */
-    private function setAuth($auth)
+    public function authAs($auth)
     {
         $requiredProperties = ['codigoEmpresa', 'login', 'password', 'idioma', 'date'];
+//
+//        if (is_array($auth)) $auth = (object) $auth;
+//
+//        foreach ($requiredProperties as $property)
+//        {
+//            if (!property_exists($auth, $property)) throw new InvalidUserDataException;
+//        }
 
-        if (is_array($auth)) $auth = (object) $auth;
+        $this->auth = $this->checkReqPropsAndGet($auth, $requiredProperties, InvalidUserDataException::class);
+    }
 
-        foreach ($requiredProperties as $property)
+    /**
+     * Check if object/array has required props and return object.
+     * If not dispatch exception
+     *
+     * @param $props
+     * @param $reqProps
+     * @param $exception
+     * @return object
+     */
+    private function checkReqPropsAndGet($props, $reqProps, $exception)
+    {
+        if (is_array($props)) $props = (object) $props;
+
+        foreach ($reqProps as $property)
         {
-            if (!property_exists($auth, $property)) throw new InvalidUserDataException;
+            if (!property_exists($props, $property)) throw new $exception;
         }
 
-        $this->auth = $auth;
+        return $props;
+    }
+
+    public function getUsuarios()
+    {
+        $requiredProperties = []
     }
 }

@@ -7,19 +7,34 @@ class L3GSign
 {
     private $request;
 
-    public function __construct($auth)
+    public function __construct()
     {
-        $this->request = new Request($auth);
+        $this->request = new Request;
     }
 
     /**
-     * Returns new instance of L3GSign
+     * Returns new instance of L3GSign with data user defined
      *
      * @param $auth object|array User data to authenticate request
      * @return L3GSign
+     * @throws Exceptions\InvalidUserDataException
      */
-    public static function auth($auth)
+    public static function authAs($auth)
     {
-        return new L3GSign($auth);
+        return (new L3GSign)->setAuth($auth);
+    }
+
+    /**
+     * Sets user data of the request
+     *
+     * @param $auth
+     * @return $this
+     * @throws Exceptions\InvalidUserDataException
+     */
+    public function setAuth($auth)
+    {
+        $this->request->authAs($auth);
+
+        return $this;
     }
 }
