@@ -37,4 +37,11 @@ class L3GSign
 
         return $this;
     }
+
+    public function getUsuarios()
+    {
+        $this->request->getUsuarios();
+
+        return $this;
+    }
 }

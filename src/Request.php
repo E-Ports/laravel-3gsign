@@ -5,6 +5,8 @@ namespace Axsor\L3GSign;
 
 use Artisaninweb\SoapWrapper\SoapWrapper;
 use Axsor\L3GSign\Exceptions\InvalidUserDataException;
+use Illuminate\Support\Facades\Log;
+
 
 class Request
 {
@@ -27,20 +29,36 @@ class Request
      * Checks if all required properties are in object
      *
      * @param $auth
-     * @throws InvalidUserDataException
+     * @return Request
      */
     public function authAs($auth)
     {
         $requiredProperties = ['codigoEmpresa', 'login', 'password', 'idioma', 'date'];
-//
-//        if (is_array($auth)) $auth = (object) $auth;
-//
-//        foreach ($requiredProperties as $property)
-//        {
-//            if (!property_exists($auth, $property)) throw new InvalidUserDataException;
-//        }
 
         $this->auth = $this->checkReqPropsAndGet($auth, $requiredProperties, InvalidUserDataException::class);
+
+        return $this;
+    }
+
+    public function getUsuarios()
+    {
+//        $response = $this->soapWrapper->call('GetUsuarios', (array) $this->auth);
+
+        $this->soapWrapper->add('L3GSign', function ($service) {
+//            $service->wsdl(config('3gsign.url'))
+            $service->wsdl('https://integration.3gmobilesign.com/mobilesignws.asmx?WSDL')
+                ->trace(true);
+        });
+
+        $response = $this->soapWrapper->call('L3GSign.GetUsuarios', [
+            'codigoEmpresa' => 'eports',
+            'login' => 'admin',
+            'password' => 'admin',
+            'idioma' => 'es',
+            'date' => 'asdf'
+        ]);
+
+        var_dump($response);
     }
 
     /**
@@ -62,10 +80,5 @@ class Request
         }
 
         return $props;
-    }
-
-    public function getUsuarios()
-    {
-        $requiredProperties = []
     }
 }
