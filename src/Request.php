@@ -2,11 +2,10 @@
 
 namespace Axsor\L3GSign;
 
-
+use Artisaninweb\SoapWrapper\Service;
 use Artisaninweb\SoapWrapper\SoapWrapper;
 use Axsor\L3GSign\Exceptions\InvalidUserDataException;
 use Illuminate\Support\Facades\Log;
-
 
 class Request
 {
@@ -15,6 +14,11 @@ class Request
     public function __construct()
     {
         $this->soapWrapper = new SoapWrapper();
+
+        $this->soapWrapper->add('L3GSign', function (Service $service) {
+            $service->wsdl(config('l3gsign.url'))
+                ->trace(true);
+        });
         /*
          *  <mob:codigoEmpresa>empresaEjemplo</mob:codigoEmpresa>
             <mob:login>wsempresaEjemplo</mob:login>
@@ -33,7 +37,9 @@ class Request
      */
     public function authAs($auth)
     {
-        $requiredProperties = ['codigoEmpresa', 'login', 'password', 'idioma', 'date'];
+        $requiredProperties = ['codigoEmpresa', 'login', 'password', 'idioma'
+            , 'date'
+        ];
 
         $this->auth = $this->checkReqPropsAndGet($auth, $requiredProperties, InvalidUserDataException::class);
 
@@ -42,20 +48,12 @@ class Request
 
     public function getUsuarios()
     {
-//        $response = $this->soapWrapper->call('GetUsuarios', (array) $this->auth);
-
-        $this->soapWrapper->add('L3GSign', function ($service) {
-//            $service->wsdl(config('3gsign.url'))
-            $service->wsdl('https://integration.3gmobilesign.com/mobilesignws.asmx?WSDL')
-                ->trace(true);
-        });
-
         $response = $this->soapWrapper->call('L3GSign.GetUsuarios', [
             'codigoEmpresa' => 'eports',
             'login' => 'admin',
             'password' => 'admin',
             'idioma' => 'es',
-            'date' => 'asdf'
+            'date' => 'm23[...]34'
         ]);
 
         var_dump($response);

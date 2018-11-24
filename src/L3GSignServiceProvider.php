@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 class L3GSignServiceProvider extends ServiceProvider
 {
 
-    protected $configPath = '/../config/3gsign.php';
+    protected $configPath = '/../config/l3gsign.php';
 
     /**
      * Registering L3GSign config without publishing it
