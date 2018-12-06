@@ -48,13 +48,7 @@ class Request
 
     public function getUsuarios()
     {
-        $response = $this->soapWrapper->call('L3GSign.GetUsuarios', [
-            'codigoEmpresa' => 'eports',
-            'login' => 'admin',
-            'password' => 'admin',
-            'idioma' => 'es',
-            'date' => 'm23[...]34'
-        ]);
+        $response = $this->soapWrapper->call('L3GSign.GetUsuarios', (array) $this->auth);
 
         var_dump($response);
     }
